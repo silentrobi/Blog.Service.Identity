@@ -1,4 +1,5 @@
 using Autofac;
+using Blog.Service.Identity.Api.Extensions;
 using Blog.Service.Identity.Domain.Role;
 using Blog.Service.Identity.Domain.User;
 using Blog.Service.Identity.Infrastructure.Contexts;
@@ -71,6 +72,8 @@ namespace Blog.Service.Identity.Api
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseErrorHandlingMiddleware();
 
             app.UseEndpoints(endpoints =>
             {

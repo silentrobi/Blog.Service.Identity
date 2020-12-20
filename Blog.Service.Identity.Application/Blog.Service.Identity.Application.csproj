@@ -9,6 +9,7 @@
 		<PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.1.0" />
 		<PackageReference Include="AutoMapper" Version="10.1.1" />
 		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.0" />
+		<PackageReference Include="FluentValidation" Version="9.3.0" />
 		<PackageReference Include="IdentityServer4.AspNetIdentity" Version="4.1.1" />
 		<PackageReference Include="IdentityServer4.EntityFramework" Version="4.1.1" />
 		<PackageReference Include="IdentityServer4.Storage" Version="4.1.1" />
@@ -28,8 +29,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="Features\" />
 		<Folder Include="Behaviours\" />
+		<Folder Include="Features\UserAccount\Queries\Handlers\" />
+		<Folder Include="Features\UserAccount\Queries\Validators\" />
+		<Folder Include="Features\UserAccount\Repositories\" />
+		<Folder Include="Features\UserAccount\SeedWork\" />
 		<ProjectReference Include="..\Blog.Service.Identity.Domain\Blog.Service.Identity.Domain.csproj" />
 	</ItemGroup>
 
