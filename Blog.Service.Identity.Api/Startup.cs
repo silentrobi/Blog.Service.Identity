@@ -1,16 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Blog.Service.Identity.Domain.Role;
+using Blog.Service.Identity.Domain.User;
 using Blog.Service.Identity.Infrastructure.Contexts;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 
 namespace Blog.Service.Identity.Api
 {
@@ -27,8 +25,29 @@ namespace Blog.Service.Identity.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddDbContext<IdentityContext>(options =>
-                    options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddDbContext<ApplicationIdentityDbContext>(
+                options => options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddIdentity<User, Role>()
+                .AddEntityFrameworkStores<ApplicationIdentityDbContext>()
+                .AddDefaultTokenProviders();
+
+            services.AddIdentityServer()
+                .AddDeveloperSigningCredential()
+                // this adds the operational data from DB (codes, tokens, consents)
+                .AddOperationalStore(options =>
+                    {
+                        options.ConfigureDbContext = builder => builder.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"),
+                             sql => sql.MigrationsAssembly("Blog.Service.Identity.Infrastructure"));
+                        // this enables automatic token cleanup. this is optional.
+                        options.EnableTokenCleanup = true;
+                        options.TokenCleanupInterval = 30; // interval in seconds
+                    })
+                .AddInMemoryIdentityResources(Config.GetIdentityResources())
+                .AddInMemoryApiResources(Config.GetApiResources())
+                .AddInMemoryClients(Config.GetClients())
+                .AddAspNetIdentity<User>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -49,6 +68,16 @@ namespace Blog.Service.Identity.Api
             {
                 endpoints.MapControllers();
             });
+
+            AutoMigrate(app);
+        }
+
+        private void AutoMigrate(IApplicationBuilder app)
+        {
+            using var serviceScope = app.ApplicationServices.CreateScope();
+            using var context = serviceScope.ServiceProvider.GetService<ApplicationIdentityDbContext>();
+
+            context.Database.Migrate();
         }
     }
 }
