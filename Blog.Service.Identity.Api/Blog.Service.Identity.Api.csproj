@@ -34,6 +34,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Blog.Service.Identity.Infrastructure\Blog.Service.Identity.Infrastructure.csproj" />
+	<ProjectReference Include="..\Blog.Service.Identity.Application\Blog.Service.Identity.Application.csproj" />
   </ItemGroup>
 
 

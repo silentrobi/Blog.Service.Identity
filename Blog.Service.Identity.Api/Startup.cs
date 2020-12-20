@@ -1,3 +1,4 @@
+using Autofac;
 using Blog.Service.Identity.Domain.Role;
 using Blog.Service.Identity.Domain.User;
 using Blog.Service.Identity.Infrastructure.Contexts;
@@ -48,6 +49,13 @@ namespace Blog.Service.Identity.Api
                 .AddInMemoryApiResources(Config.GetApiResources())
                 .AddInMemoryClients(Config.GetClients())
                 .AddAspNetIdentity<User>();
+        }
+
+        public void ConfigureContainer(ContainerBuilder builder)
+        {
+            builder.RegisterModule(new DomainModule());
+            builder.RegisterModule(new ServiceModule());
+            builder.RegisterModule(new MediatorModule());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
