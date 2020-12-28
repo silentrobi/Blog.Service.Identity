@@ -5,7 +5,6 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Blog.Service.Identity.Api.Controllers.v1
 {
-    [Route("api/[controller]")]
     [ApiController]
     public class BaseController : ControllerBase
     {

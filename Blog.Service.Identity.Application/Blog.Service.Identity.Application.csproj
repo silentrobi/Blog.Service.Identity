@@ -30,6 +30,7 @@
 
 	<ItemGroup>
 		<Folder Include="Behaviours\" />
+		<Folder Include="Features\UserAccount\Dtos\" />
 		<Folder Include="Features\UserAccount\Queries\Handlers\" />
 		<Folder Include="Features\UserAccount\Queries\Validators\" />
 		<Folder Include="Features\UserAccount\Repositories\" />

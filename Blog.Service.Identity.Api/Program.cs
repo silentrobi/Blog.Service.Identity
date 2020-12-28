@@ -22,6 +22,6 @@ namespace Blog.Service.Identity.Api
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                }).UseServiceProviderFactory(new AutofacServiceProviderFactory());;
+                }).UseServiceProviderFactory(new AutofacServiceProviderFactory());
     }
 }

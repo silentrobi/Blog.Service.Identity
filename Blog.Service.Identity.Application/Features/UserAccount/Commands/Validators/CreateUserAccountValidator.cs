@@ -18,9 +18,9 @@ namespace Blog.Service.Identity.Application.Features.UserAccount.Commands.Valida
               .EmailAddress().WithMessage("A valid email is required")
               .Must(IsEmailUnique).WithMessage("Email Id is already exist");
 
-            RuleFor(model => model.PhoneNumber)
-              .Cascade(CascadeMode.Stop)
-              .Matches(@"^(\+[0-9]{9})$").When(s => !string.IsNullOrEmpty(s.PhoneNumber)).WithMessage("Invalid phone number");
+            //RuleFor(model => model.PhoneNumber)
+            //  .Cascade(CascadeMode.Stop)
+            //  .Matches(@"^(\+[0-9]{9})$").When(s => !string.IsNullOrEmpty(s.PhoneNumber)).WithMessage("Invalid phone number");
 
             RuleFor(model => model.Password)
                 .Cascade(CascadeMode.Stop)

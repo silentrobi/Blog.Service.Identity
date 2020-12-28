@@ -1,5 +1,6 @@
 using Autofac;
 using Blog.Service.Identity.Api.Extensions;
+using Blog.Service.Identity.Api.Services;
 using Blog.Service.Identity.Domain.Role;
 using Blog.Service.Identity.Domain.User;
 using Blog.Service.Identity.Infrastructure.Contexts;
@@ -10,7 +11,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
 
 namespace Blog.Service.Identity.Api
 {
@@ -27,6 +27,7 @@ namespace Blog.Service.Identity.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddApiVersioning();
 
             services.AddDbContext<ApplicationIdentityDbContext>(
                 options => options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
@@ -34,6 +35,8 @@ namespace Blog.Service.Identity.Api
             services.AddIdentity<User, Role>()
                 .AddEntityFrameworkStores<ApplicationIdentityDbContext>()
                 .AddDefaultTokenProviders();
+
+            services.AddSwagger();
 
             services.AddIdentityServer()
                 .AddDeveloperSigningCredential()
@@ -54,8 +57,8 @@ namespace Blog.Service.Identity.Api
 
         public void ConfigureContainer(ContainerBuilder builder)
         {
-            builder.RegisterModule(new DomainModule());
-            builder.RegisterModule(new ServiceModule());
+            //builder.RegisterModule(new DomainModule());
+           // builder.RegisterModule(new ServiceModule());
             builder.RegisterModule(new MediatorModule());
         }
 
@@ -74,6 +77,8 @@ namespace Blog.Service.Identity.Api
             app.UseAuthorization();
 
             app.UseErrorHandlingMiddleware();
+
+            app.UseSwaggerDoc();
 
             app.UseEndpoints(endpoints =>
             {

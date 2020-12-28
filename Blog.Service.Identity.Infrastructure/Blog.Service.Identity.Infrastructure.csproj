@@ -28,8 +28,4 @@
     <ProjectReference Include="..\Blog.Service.Identity.Domain\Blog.Service.Identity.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Database\Migrations\" />
-  </ItemGroup>
-
 </Project>
