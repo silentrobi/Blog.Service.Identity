@@ -55,8 +55,8 @@ namespace Blog.Service.Identity.Api
                 .AddInMemoryApiResources(Config.GetApiResources())
                 .AddInMemoryClients(Config.GetClients())
                 .AddInMemoryApiScopes(Config.GetApiScopes())
-                .AddAspNetIdentity<User>()
-                .AddProfileService<ProfileService>();
+                .AddAspNetIdentity<User>();
+                //.AddProfileService<ProfileService>();
 
             services.AddAuthentication(options =>
             {

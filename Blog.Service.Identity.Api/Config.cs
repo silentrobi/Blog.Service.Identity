@@ -26,7 +26,7 @@ namespace Blog.Service.Identity.Api
         {
             return new List<ApiResource>
             {
-                new ApiResource("blogapi", "Blog.Service.BlogApi")
+                new ApiResource("blogapi", "Blog.Service.BlogApi", new[] { JwtClaimTypes.Subject, JwtClaimTypes.Email, JwtClaimTypes.Role, JwtClaimTypes.PreferredUserName })
                 {
                     Scopes = {"blogapi.read", "blogapi.write"}
                 }
