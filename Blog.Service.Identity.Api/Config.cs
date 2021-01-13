@@ -1,4 +1,5 @@
 ﻿using IdentityModel;
+using IdentityServer4;
 using IdentityServer4.Models;
 using System.Collections.Generic;
 
@@ -53,10 +54,15 @@ namespace Blog.Service.Identity.Api
                     ClientName = "blogapi",
                     ClientSecrets = { new Secret(SHARED_SECRET.Sha256()) },
                     AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
-                    AllowOfflineAccess = true,//Enables refresh token.
+                    AllowOfflineAccess = true,//Enables refresh token
+                    AlwaysSendClientClaims = true,
+                    AlwaysIncludeUserClaimsInIdToken = true,
                     AllowedScopes =
                     {
-                        "openid", "blogapi.read", "blogapi.write"
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.OfflineAccess, 
+                        "blogapi.read", "blogapi.write"
                     },
                     AllowAccessTokensViaBrowser = true,
                     //AccessTokenLifetime = 3600
