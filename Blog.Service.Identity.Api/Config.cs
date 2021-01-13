@@ -1,4 +1,4 @@
-﻿using IdentityServer4;
+﻿using IdentityModel;
 using IdentityServer4.Models;
 using System.Collections.Generic;
 
@@ -6,6 +6,8 @@ namespace Blog.Service.Identity.Api
 {
     public class Config
     {
+        private const string SHARED_SECRET = "TYYvyjrJ4GThugsYGwnyEh2m63Tr7yyPk6YVwBb6";
+
         public static IEnumerable<IdentityResource> GetIdentityResources()
         {
             return new List<IdentityResource>
@@ -16,13 +18,16 @@ namespace Blog.Service.Identity.Api
             };
         }
 
+        //Resources are something you want to protect with IdentityServer - either identity data of your users, or APIs.
+        //Identity data:Identity information (aka claims) about a user, e.g. name or email address.
+        //APIs: APIs resources represent functionality a client wants to invoke - typically modelled as Web APIs, but not necessarily.
         public static IEnumerable<ApiResource> GetApiResources()
         {
             return new List<ApiResource>
             {
-                new ApiResource("api1", "api1")
+                new ApiResource("blogapi", "Blog.Service.BlogApi")
                 {
-                    Scopes = {"api1"}
+                    Scopes = {"blogapi.read", "blogapi.write"}
                 }
             };
         }
@@ -31,30 +36,30 @@ namespace Blog.Service.Identity.Api
         {
             return new List<ApiScope>
             {
-                new ApiScope
-                {
-                    Name = "api1",
-                    Emphasize=true,
-                }
+                new ApiScope("blogapi.read", "Read Access to BlogApi"),
+                new ApiScope("blogapi.write", "Write Access to BlogApi")
             };
         }
 
+        //IdentityServer needs to know what client applications are allowed to use it
+        //Client Access Control List
         public static IEnumerable<Client> GetClients()
         {
             return new[]
             {
                 new Client {
                     RequireConsent = false,
-                    ClientId = "postman",
-                    ClientName = "Postman",
-                    ClientSecrets = { new Secret("secret".Sha256()) },
-                    AllowedGrantTypes = GrantTypes.ClientCredentials,
+                    ClientId = "blogapi",
+                    ClientName = "blogapi",
+                    ClientSecrets = { new Secret(SHARED_SECRET.Sha256()) },
+                    AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
+                    AllowOfflineAccess = true,//Enables refresh token.
                     AllowedScopes =
                     {
-                        "api1"
+                        "openid", "blogapi.read", "blogapi.write"
                     },
                     AllowAccessTokensViaBrowser = true,
-                    AccessTokenLifetime = 3600
+                    //AccessTokenLifetime = 3600
                 }
             };
         }

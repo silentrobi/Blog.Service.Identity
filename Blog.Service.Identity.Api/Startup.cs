@@ -63,15 +63,9 @@ namespace Blog.Service.Identity.Api
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(o =>
             {
-                o.Authority = "http://localhost:5000";
-                o.Audience = "resourceapi";
+                o.Authority = "https://localhost:5001";
+                o.Audience = "blogapi";
                 o.RequireHttpsMetadata = false;
-            });
-
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("ApiReader", policy => policy.RequireClaim("scope", "api.read"));
-                options.AddPolicy("Consumer", policy => policy.RequireClaim(ClaimTypes.Role, "consumer"));
             });
         }
 
