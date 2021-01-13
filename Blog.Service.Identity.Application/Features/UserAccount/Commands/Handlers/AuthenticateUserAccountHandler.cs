@@ -19,25 +19,32 @@ namespace Blog.Service.Identity.Application.Features.UserAccount.Commands.Handle
         public async Task<bool> Handle(AuthenticateUserAccountCommand request, CancellationToken cancellationToken)
         {
             var isAuthModeEmail = AuthenticationModeChecker.IsEmail(request.UserField);
-            
+            bool result;
+
             if (isAuthModeEmail)
             {
-                var user = await _userManager.FindByEmailAsync(request.UserField);
-                if(user != null && await _userManager.CheckPasswordAsync(user, request.Password))
-                {
-                    return true;
-                }
-                return false;
+                result = await AuthenticateUserAccountByEmail(request);
             }
             else
             {
-                var user = await _userManager.FindByNameAsync(request.UserField);
-                if (user != null && await _userManager.CheckPasswordAsync(user, request.Password))
-                {
-                    return true;
-                }
-                return false;
+                result = await AuthenticateUserAccountByUserName(request);
             }
+
+            return result;
+        }
+
+        private async Task<bool> AuthenticateUserAccountByEmail(AuthenticateUserAccountCommand request)
+        {
+            var user = await _userManager.FindByEmailAsync(request.UserField);
+
+            return user != null && await _userManager.CheckPasswordAsync(user, request.Password);
+        }
+
+        private async Task<bool> AuthenticateUserAccountByUserName(AuthenticateUserAccountCommand request)
+        {
+            var user = await _userManager.FindByNameAsync(request.UserField);
+
+            return user != null && await _userManager.CheckPasswordAsync(user, request.Password);
         }
     }
 }

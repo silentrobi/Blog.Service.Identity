@@ -4,6 +4,7 @@ using Blog.Service.Identity.Api.Services;
 using Blog.Service.Identity.Domain.Role;
 using Blog.Service.Identity.Domain.User;
 using Blog.Service.Identity.Infrastructure.Contexts;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -11,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.Security.Claims;
 
 namespace Blog.Service.Identity.Api
 {
@@ -52,7 +54,25 @@ namespace Blog.Service.Identity.Api
                 .AddInMemoryIdentityResources(Config.GetIdentityResources())
                 .AddInMemoryApiResources(Config.GetApiResources())
                 .AddInMemoryClients(Config.GetClients())
+                .AddInMemoryApiScopes(Config.GetApiScopes())
                 .AddAspNetIdentity<User>();
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(o =>
+            {
+                o.Authority = "http://localhost:5000";
+                o.Audience = "resourceapi";
+                o.RequireHttpsMetadata = false;
+            });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("ApiReader", policy => policy.RequireClaim("scope", "api.read"));
+                options.AddPolicy("Consumer", policy => policy.RequireClaim(ClaimTypes.Role, "consumer"));
+            });
         }
 
         public void ConfigureContainer(ContainerBuilder builder)
@@ -70,7 +90,13 @@ namespace Blog.Service.Identity.Api
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseAuthentication();// The missing line
+
+            app.UseIdentityServer();
+
             app.UseHttpsRedirection();
+
+            app.UseCors(options => options.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 
             app.UseRouting();
 

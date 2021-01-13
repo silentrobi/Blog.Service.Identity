@@ -34,7 +34,6 @@ namespace Blog.Service.Identity.Application.Features.UserAccount.Commands.Handle
             await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("role", "Consumer"));
 
             return true;
-
         }
     }
 }
