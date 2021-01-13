@@ -4,13 +4,20 @@
 
 ## Authenticate Client Application
 To authenticate client application (mobile, web app etc.), use following endpoints.
+
 **Request token** 
+
 _Identity4 server verifies the client and return access token._
- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; **URL** : `endpoint/connect/token`
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; **Method** : `POST`
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; **Auth required** : NO
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; **Content-Type** : `application/x-www-form-urlencoded`
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; **Request body required fields**: _client_id, client_secret, scope, and grant_type_  
+
+**URL** : `endpoint/connect/token`
+
+**Method** : `POST`
+
+**Auth required** : NO
+
+**Content-Type** : `application/x-www-form-urlencoded`
+
+**Request body required fields**: _client_id, client_secret, scope, and grant_type_  
 
 **Example**
   ```
