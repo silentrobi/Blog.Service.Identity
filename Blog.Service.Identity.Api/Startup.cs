@@ -5,7 +5,6 @@ using Blog.Service.Identity.Domain.Role;
 using Blog.Service.Identity.Domain.User;
 using Blog.Service.Identity.Infrastructure.Contexts;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -62,7 +61,6 @@ namespace Blog.Service.Identity.Api
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
             }).AddJwtBearer(o =>
             {
                 o.Authority = "https://localhost:5001";
