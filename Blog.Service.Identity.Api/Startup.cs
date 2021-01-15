@@ -55,6 +55,7 @@ namespace Blog.Service.Identity.Api
                 .AddInMemoryClients(Config.GetClients())
                 .AddInMemoryApiScopes(Config.GetApiScopes())
                 .AddAspNetIdentity<User>()
+                .AddProfileService<ProfileService>()
                 .AddResourceOwnerValidator<ResourceOwnerPasswordValidatorService<User>>(); //here;
 
             services.AddAuthentication(options =>

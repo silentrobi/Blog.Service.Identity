@@ -31,7 +31,8 @@ namespace Blog.Service.Identity.Api
                 "Blog.Service.BlogApi",
                 new[] { 
                     JwtClaimTypes.Subject, 
-                    JwtClaimTypes.Email, JwtClaimTypes.Role, 
+                    JwtClaimTypes.Email, 
+                    JwtClaimTypes.Role, 
                     JwtClaimTypes.PreferredUserName
                 })
                 {
@@ -64,6 +65,7 @@ namespace Blog.Service.Identity.Api
                     AllowOfflineAccess = true,//Enables refresh token
                     AlwaysSendClientClaims = true,
                     AlwaysIncludeUserClaimsInIdToken = true,
+                    UpdateAccessTokenClaimsOnRefresh=true,
                     AllowedScopes =
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
