@@ -25,13 +25,5 @@ namespace Blog.Service.Identity.Api.Controllers.v1
 
             return Ok(result);
         }
-
-        [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] AuthenticateUserAccountCommand request)
-        {
-            var result = await Mediator.Send(request);
-
-            return Ok(result);
-        }
     }
 }

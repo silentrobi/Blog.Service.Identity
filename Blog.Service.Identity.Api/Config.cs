@@ -26,7 +26,14 @@ namespace Blog.Service.Identity.Api
         {
             return new List<ApiResource>
             {
-                new ApiResource("blogapi", "Blog.Service.BlogApi", new[] { JwtClaimTypes.Subject, JwtClaimTypes.Email, JwtClaimTypes.Role, JwtClaimTypes.PreferredUserName })
+                new ApiResource(
+                "blogapi",
+                "Blog.Service.BlogApi",
+                new[] { 
+                    JwtClaimTypes.Subject, 
+                    JwtClaimTypes.Email, JwtClaimTypes.Role, 
+                    JwtClaimTypes.PreferredUserName
+                })
                 {
                     Scopes = {"blogapi.read", "blogapi.write"}
                 }
@@ -61,7 +68,7 @@ namespace Blog.Service.Identity.Api
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
-                        IdentityServerConstants.StandardScopes.OfflineAccess, 
+                        IdentityServerConstants.StandardScopes.OfflineAccess,
                         "blogapi.read", "blogapi.write"
                     },
                     AllowAccessTokensViaBrowser = true,

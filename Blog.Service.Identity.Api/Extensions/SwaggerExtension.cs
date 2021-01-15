@@ -26,7 +26,7 @@ namespace Blog.Service.Identity.Api.Extensions
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Version = "v1",
-                    Title = "Blog API",
+                    Title = "Identity",
                     Description = "ASP.NET Core Web API",
                     Contact = new OpenApiContact
                     {
