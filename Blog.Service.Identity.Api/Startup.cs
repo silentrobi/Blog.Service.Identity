@@ -47,7 +47,6 @@ namespace Blog.Service.Identity.Api
                              sql => sql.MigrationsAssembly("Blog.Service.Identity.Infrastructure"));
                         // this enables automatic token cleanup. this is optional.
                         options.EnableTokenCleanup = true;
-                        options.TokenCleanupInterval = 30; // interval in seconds
                     })
                 .AddInMemoryIdentityResources(Config.GetIdentityResources())
                 .AddInMemoryApiResources(Config.GetApiResources())
@@ -64,7 +63,7 @@ namespace Blog.Service.Identity.Api
             }).AddJwtBearer(o =>
             {
                 o.Authority = "https://localhost:5001";
-                o.Audience = "blogapi";
+                o.Audience = "blogapi"; // APi Resource Name
                 o.RequireHttpsMetadata = false;
             });
         }

@@ -1,20 +1,26 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
+using System.Security.Claims;
+using System.Threading;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Blog.Service.Identity.Api.Controllers.v1
 {
     [Route("api/v{version:apiVersion}/test")]
     [ApiController]
+    [Authorize]
     public class TestController : BaseController
     {
         // GET api/values
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        public ActionResult Get()
         {
-            var userClaims = User.Claims.ToList();
+            var identity = (ClaimsIdentity) User.Identity;
 
-            return new JsonResult(User.Claims.Select(c => new { c.Type, c.Value }).ToList());
+            // Get the claims values
+            var email = HttpContext.User.Claims.Where(c => c.Type == ClaimTypes.Email)
+                               .Select(c => c.Value).SingleOrDefault();
+            return Ok(email);
         }
     }
 }

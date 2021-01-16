@@ -58,19 +58,18 @@ namespace Blog.Service.Identity.Api
             {
                 new Client {
                     RequireConsent = false,
-                    ClientId = "blogapi",
-                    ClientName = "blogapi",
+                    ClientId = "blogapp",
+                    ClientName = "blogapp",
                     ClientSecrets = { new Secret(SHARED_SECRET.Sha256()) },
-                    AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
-                    AllowOfflineAccess = true,//Enables refresh token
-                    AlwaysSendClientClaims = true,
+                    AllowedGrantTypes = GrantTypes.ResourceOwnerPasswordAndClientCredentials, // this grat type is used as blogapi with be owned client application.
                     AlwaysIncludeUserClaimsInIdToken = true,
-                    UpdateAccessTokenClaimsOnRefresh=true,
+                    //You should not use  GrantTypes.ResourceOwnerPassword for third party app access to your data. Instead use Authorization code
+                    //AllowOfflineAccess = true,//Enables refresh token
                     AllowedScopes =
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
-                        IdentityServerConstants.StandardScopes.OfflineAccess,
+                        //IdentityServerConstants.StandardScopes.OfflineAccess,
                         "blogapi.read", "blogapi.write"
                     },
                     AllowAccessTokensViaBrowser = true,
