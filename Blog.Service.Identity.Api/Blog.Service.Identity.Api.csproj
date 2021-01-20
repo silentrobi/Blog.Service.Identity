@@ -11,6 +11,9 @@
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.0" />
     <PackageReference Include="IdentityServer4.AspNetIdentity" Version="4.1.1" />
     <PackageReference Include="IdentityServer4.EntityFramework" Version="4.1.1" />
+    <PackageReference Include="MassTransit" Version="7.1.3" />
+    <PackageReference Include="MassTransit.AspNetCore" Version="7.1.3" />
+    <PackageReference Include="MassTransit.RabbitMQ" Version="7.1.3" />
     <PackageReference Include="MediatR" Version="9.0.0" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.11" />
@@ -39,6 +42,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Blog.Service.Identity.Infrastructure\Blog.Service.Identity.Infrastructure.csproj" />
 	<ProjectReference Include="..\Blog.Service.Identity.Application\Blog.Service.Identity.Application.csproj" />
+	<ProjectReference Include="..\SharedLibrary\SharedLibrary.csproj" />
   </ItemGroup>
 
 

@@ -4,6 +4,7 @@ using Blog.Service.Identity.Api.Services;
 using Blog.Service.Identity.Domain.Role;
 using Blog.Service.Identity.Domain.User;
 using Blog.Service.Identity.Infrastructure.Contexts;
+using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -12,6 +13,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
+
 namespace Blog.Service.Identity.Api
 {
     public class Startup
@@ -66,6 +69,21 @@ namespace Blog.Service.Identity.Api
                 o.Audience = "blogapi"; // APi Resource Name
                 o.RequireHttpsMetadata = false;
             });
+
+            //MassTransit new Config setting
+            services.AddMassTransit(x =>
+            {
+                x.UsingRabbitMq( (context, cfg) =>
+                {
+                    cfg.Host(new Uri("rabbitmq://localhost"), h =>
+                    {
+                        h.Username("user");
+                        h.Password("user");
+                    });
+                });
+            });
+
+            services.AddMassTransitHostedService();
         }
 
         public void ConfigureContainer(ContainerBuilder builder)

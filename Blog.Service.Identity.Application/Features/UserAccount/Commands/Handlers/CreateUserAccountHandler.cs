@@ -1,6 +1,9 @@
 ﻿using Blog.Service.Identity.Domain.User;
+using MassTransit;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using SharedLibrary;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -8,22 +11,25 @@ namespace Blog.Service.Identity.Application.Features.UserAccount.Commands.Handle
 {
     public class CreateUserAccountHandler : IRequestHandler<CreateUserAccountCommand, bool>
     {
+        private readonly IPublishEndpoint _endpoint;
         private readonly UserManager<User> _userManager;
 
-        public CreateUserAccountHandler(UserManager<User> userManager)
+        public CreateUserAccountHandler(UserManager<User> userManager, IPublishEndpoint endpoint)
         {
             _userManager = userManager;
+            _endpoint = endpoint;
         }
 
         public async Task<bool> Handle(CreateUserAccountCommand request, CancellationToken cancellationToken)
         {
-            var user = new User() { 
-                UserName  = request.UserName,
+            var user = new User()
+            {
+                UserName = request.UserName,
                 Email = request.Email,
                 PhoneNumber = request.PhoneNumber
             };
 
-            var result = await _userManager.CreateAsync( user , request.Password);
+            var result = await _userManager.CreateAsync(user, request.Password);
 
             if (!result.Succeeded) throw new Exceptions.ApplicationException(result.Errors.ToString());
 
@@ -32,6 +38,18 @@ namespace Blog.Service.Identity.Application.Features.UserAccount.Commands.Handle
             await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("userName", user.UserName));
             await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("email", user.Email));
             await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("role", "Consumer"));
+
+            try
+            {
+                await _endpoint.Publish(new
+                TestMessage{
+                    Message = "Test message"
+                });
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+            }
 
             return true;
         }
