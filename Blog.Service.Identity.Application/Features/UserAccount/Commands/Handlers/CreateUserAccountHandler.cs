@@ -1,4 +1,5 @@
-﻿using Blog.Service.Identity.Domain.User;
+﻿using Blog.Service.Identity.Application.IntegrationEvents;
+using Blog.Service.Identity.Domain.User;
 using MassTransit;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -39,17 +40,11 @@ namespace Blog.Service.Identity.Application.Features.UserAccount.Commands.Handle
             await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("email", user.Email));
             await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("role", "Consumer"));
 
-            try
+            await NotificationEvent<AccountCreateNotification>.Publish(_endpoint, new AccountCreateNotification()
             {
-                await _endpoint.Publish(new
-                TestMessage{
-                    Message = "Test message"
-                });
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine(ex.Message);
-            }
+                Title = "Account register confirmation",
+                Message = "New account is registered successfully"
+            });
 
             return true;
         }
