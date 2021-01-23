@@ -7,7 +7,7 @@ namespace Blog.Service.Identity.Application.IntegrationEvents
 {
     public class NotificationEvent<T>
     {
-        public static async Task Publish(IPublishEndpoint endpoint, T notification)
+        public static async Task Raise(IPublishEndpoint endpoint, T notification)
         {
             try
             {

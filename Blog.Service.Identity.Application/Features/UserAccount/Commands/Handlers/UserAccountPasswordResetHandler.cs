@@ -34,12 +34,10 @@ namespace Blog.Service.Identity.Application.Features.UserAccount.Commands.Handle
 
             if (result.Succeeded)
             {
-                await NotificationEvent<AccountPasswordResetNotification>.Publish(_endpoint, new AccountPasswordResetNotification());
-                
-                return true;
+                await NotificationEvent<AccountPasswordResetNotification>.Raise(_endpoint, new AccountPasswordResetNotification());
             }
 
-            return false;
+            return result.Succeeded;
         }
     }
 }

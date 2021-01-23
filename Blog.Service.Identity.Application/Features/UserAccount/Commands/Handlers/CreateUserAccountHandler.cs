@@ -40,7 +40,7 @@ namespace Blog.Service.Identity.Application.Features.UserAccount.Commands.Handle
             await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("email", user.Email));
             await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("role", "Consumer"));
 
-            await NotificationEvent<AccountCreateNotification>.Publish(_endpoint, new AccountCreateNotification()
+            await NotificationEvent<AccountCreateNotification>.Raise(_endpoint, new AccountCreateNotification()
             {
                 Title = "Account register confirmation",
                 Message = "New account is registered successfully"

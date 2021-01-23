@@ -34,16 +34,14 @@ namespace Blog.Service.Identity.Application.Features.UserAccount.Commands.Handle
 
             if (result.Succeeded) 
             {
-                await NotificationEvent<ChangePasswordNotification>.Publish(_endpoint, new ChangePasswordNotification()
+                await NotificationEvent<ChangePasswordNotification>.Raise(_endpoint, new ChangePasswordNotification()
                 {
                     Title = "Account password change confirmation",
                     Message = "Account password has changed successfully"
                 });
-
-                return true;
             }
 
-            return false;
+            return result.Succeeded;
         }
     }
 }

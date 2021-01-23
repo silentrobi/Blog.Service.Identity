@@ -32,7 +32,7 @@ namespace Blog.Service.Identity.Application.Features.UserAccount.Commands.Handle
 
             var code = await _userManager.GeneratePasswordResetTokenAsync(user);
 
-            await NotificationEvent<GeneratePasswordResetCodeNotification>.Publish(_endpoint, new GeneratePasswordResetCodeNotification()
+            await NotificationEvent<GeneratePasswordResetCodeNotification>.Raise(_endpoint, new GeneratePasswordResetCodeNotification()
             {
                 Title = "Account register confirmation",
                 Message = "New account is registered successfully",
