@@ -37,7 +37,8 @@ namespace Blog.Service.Identity.Application.Features.UserAccount.Commands.Handle
                 await NotificationEvent<ChangePasswordNotification>.Raise(_endpoint, new ChangePasswordNotification()
                 {
                     Title = "Account password change confirmation",
-                    Message = "Account password has changed successfully"
+                    Message = "Account password has changed successfully",
+                    Email = request.Email
                 });
             }
 

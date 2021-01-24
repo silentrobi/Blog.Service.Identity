@@ -36,7 +36,8 @@ namespace Blog.Service.Identity.Application.Features.UserAccount.Commands.Handle
             {
                 Title = "Account register confirmation",
                 Message = "New account is registered successfully",
-                Code = code
+                Code = code,
+                Email = request.Email
             });
 
             return true;

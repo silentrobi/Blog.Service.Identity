@@ -43,7 +43,8 @@ namespace Blog.Service.Identity.Application.Features.UserAccount.Commands.Handle
             await NotificationEvent<AccountCreateNotification>.Raise(_endpoint, new AccountCreateNotification()
             {
                 Title = "Account register confirmation",
-                Message = "New account is registered successfully"
+                Message = "New account is registered successfully",
+                Email = request.Email
             });
 
             return true;
