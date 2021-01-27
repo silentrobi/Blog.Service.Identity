@@ -13,6 +13,7 @@ namespace Blog.Service.Identity.Api.Controllers.v1
     {
         // GET api/values
         [HttpGet]
+        [ValidateAntiForgeryToken]
         public ActionResult Get()
         {
             var identity = (ClaimsIdentity) User.Identity;

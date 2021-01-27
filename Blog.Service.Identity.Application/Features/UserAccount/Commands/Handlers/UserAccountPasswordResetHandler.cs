@@ -30,8 +30,8 @@ namespace Blog.Service.Identity.Application.Features.UserAccount.Commands.Handle
                 throw new ApplicationException("User not found with that email Id");
             }
 
-            var result = await _userManager.ResetPasswordAsync(user, request.Code.Trim(), request.NewPassword);
-
+            var result = await _userManager.ResetPasswordAsync(user, request.Code, request.NewPassword);
+            
             if (result.Succeeded)
             {
                 await NotificationEvent<AccountPasswordResetNotification>.Raise(_endpoint, new AccountPasswordResetNotification());

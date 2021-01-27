@@ -4,7 +4,6 @@ using MassTransit;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using SharedLibrary;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 

@@ -10,18 +10,18 @@ using System.Threading.Tasks;
 
 namespace Blog.Service.Identity.Application.Features.UserAccount.Commands.Handlers
 {
-    class GenerateUserAccountPasswordResetCodeHandler : IRequestHandler<GenerateUserAccountPasswordResetCodeCommand, bool>
+    public class GenerateUserAccountPasswordResetTokenHandler : IRequestHandler<GenerateUserAccountPasswordResetTokenCommand, bool>
     {
         private readonly IPublishEndpoint _endpoint;
         private readonly UserManager<User> _userManager;
 
-        public GenerateUserAccountPasswordResetCodeHandler(UserManager<User> userManager, IPublishEndpoint endpoint)
+        public GenerateUserAccountPasswordResetTokenHandler(UserManager<User> userManager, IPublishEndpoint endpoint)
         {
             _userManager = userManager;
             _endpoint = endpoint;
         }
 
-        public async Task<bool> Handle(GenerateUserAccountPasswordResetCodeCommand request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(GenerateUserAccountPasswordResetTokenCommand request, CancellationToken cancellationToken)
         {
             var user = await _userManager.FindByEmailAsync(request.Email.Trim());
 
@@ -29,14 +29,14 @@ namespace Blog.Service.Identity.Application.Features.UserAccount.Commands.Handle
             {
                 throw new ApplicationException("User not found with that email Id");
             }
-
-            var code = await _userManager.GeneratePasswordResetTokenAsync(user);
-
-            await NotificationEvent<GeneratePasswordResetCodeNotification>.Raise(_endpoint, new GeneratePasswordResetCodeNotification()
+            
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            
+            await NotificationEvent<GeneratePasswordResetTokenNotification>.Raise(_endpoint, new GeneratePasswordResetTokenNotification()
             {
-                Title = "Account register confirmation",
-                Message = "New account is registered successfully",
-                Code = code,
+                Title = "Password recovery",
+                Message = "Your password recovery token:",
+                Token = token,
                 Email = request.Email
             });
 
