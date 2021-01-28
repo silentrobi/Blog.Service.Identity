@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Blog.Service.Identity.Api.Controllers.v1
 {
     [ApiController]
-    [Route("api/v{version:apiVersion}/identity/users")]
+    [Route("v{version:apiVersion}/users")]
     public class UserAccountController : BaseController
     {
         public UserAccountController()
