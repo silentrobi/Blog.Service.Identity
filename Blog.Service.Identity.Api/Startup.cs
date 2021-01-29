@@ -77,8 +77,8 @@ namespace Blog.Service.Identity.Api
                 {
                     cfg.Host(new Uri("rabbitmq://localhost"), h =>
                     {
-                        h.Username("user");
-                        h.Password("user");
+                        h.Username("guest");
+                        h.Password("guest");
                     });
                 });
             });
