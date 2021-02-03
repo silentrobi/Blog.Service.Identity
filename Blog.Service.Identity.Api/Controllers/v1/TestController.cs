@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using System.Security.Claims;
-using System.Threading;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,7 +12,6 @@ namespace Blog.Service.Identity.Api.Controllers.v1
     {
         // GET api/values
         [HttpGet]
-        [ValidateAntiForgeryToken]
         public ActionResult Get()
         {
             var identity = (ClaimsIdentity) User.Identity;
