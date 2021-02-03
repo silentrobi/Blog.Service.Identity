@@ -44,7 +44,7 @@ namespace Blog.Service.Identity.Api
             // Adds IdentityServer
             services.AddIdentityServer(x =>
             {
-                x.IssuerUri = "null";
+                x.IssuerUri = "http://blog.service.identity";
             })
             .AddDeveloperSigningCredential()
             // this adds the operational data from DB (codes, tokens, consents)
@@ -70,11 +70,10 @@ namespace Blog.Service.Identity.Api
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(o =>
             {
-                o.Authority = "http://localhost:5010";
+                o.Authority = "http://blog.service.identity";
                 o.Audience = "blogapi"; // APi Resource Name
                 o.RequireHttpsMetadata = false;
                 o.IncludeErrorDetails = true;
-                o.MetadataAddress = "http://localhost:5010/.well-known/openid-configuration";
             });
 
             //MassTransit new Config setting
