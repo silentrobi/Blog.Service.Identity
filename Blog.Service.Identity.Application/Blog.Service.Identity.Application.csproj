@@ -1,0 +1,48 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netcoreapp3.1</TargetFramework>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Autofac" Version="6.1.0" />
+		<PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.1.0" />
+		<PackageReference Include="AutoMapper" Version="10.1.1" />
+		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.0" />
+		<PackageReference Include="FluentValidation" Version="9.3.0" />
+		<PackageReference Include="IdentityServer4.AspNetIdentity" Version="4.1.1" />
+		<PackageReference Include="IdentityServer4.EntityFramework" Version="4.1.1" />
+		<PackageReference Include="IdentityServer4.Storage" Version="4.1.1" />
+		<PackageReference Include="MassTransit" Version="7.1.3" />
+		<PackageReference Include="MassTransit.AspNetCore" Version="7.1.3" />
+		<PackageReference Include="MassTransit.RabbitMQ" Version="7.1.3" />
+		<PackageReference Include="MediatR" Version="9.0.0" />
+		<PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.1">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.1">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.Extensions.Identity.Core" Version="5.0.1" />
+		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.1" />
+		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.Design" Version="1.1.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Folder Include="Behaviours\" />
+		<Folder Include="Features\UserAccount\Dtos\" />
+		<Folder Include="Features\UserAccount\Queries\Handlers\" />
+		<Folder Include="Features\UserAccount\Queries\Validators\" />
+		<Folder Include="Features\UserAccount\Repositories\" />
+		<Folder Include="Features\UserAccount\SeedWork\" />
+		<ProjectReference Include="..\Blog.Service.Identity.Domain\Blog.Service.Identity.Domain.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\SharedLibrary\SharedLibrary.csproj" />
+	</ItemGroup>
+
+</Project>
