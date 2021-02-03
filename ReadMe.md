@@ -39,3 +39,10 @@ _Identity4 server verifies the client and return access token._
 
 
 To learn moredetail about the `grant_type` visit [here](https://identityserver4.readthedocs.io/en/latest/topics/grant_types.html)
+
+# Docker Run
+
+**Build Docker Image:** `docker build -t <image name> .`
+**Run Docker Image:** ` docker run --network=<network name> -itd -d -p 5010:80 --name <image name> <container name>`
+
+> **Note:** Make sure your infrastructure service's (Postgre, RabbitMq etc.) network name matches with the  newtwork name in `--network=<network name>` parameter. Otherwise your container will fail to run.

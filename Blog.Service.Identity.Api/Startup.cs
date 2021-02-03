@@ -41,24 +41,29 @@ namespace Blog.Service.Identity.Api
 
             services.AddSwagger();
 
-            services.AddIdentityServer()
-                .AddDeveloperSigningCredential()
-                // this adds the operational data from DB (codes, tokens, consents)
-                .AddOperationalStore(options =>
+            // Adds IdentityServer
+            services.AddIdentityServer(x =>
+            {
+                x.IssuerUri = "null";
+            })
+            .AddDeveloperSigningCredential()
+            // this adds the operational data from DB (codes, tokens, consents)
+            .AddOperationalStore(options =>
                     {
                         options.ConfigureDbContext = builder => builder.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"),
                              sql => sql.MigrationsAssembly("Blog.Service.Identity.Infrastructure"));
                         // this enables automatic token cleanup. this is optional.
                         options.EnableTokenCleanup = true;
                     })
-                .AddInMemoryIdentityResources(Config.GetIdentityResources())
-                .AddInMemoryApiResources(Config.GetApiResources())
-                .AddInMemoryClients(Config.GetClients())
-                .AddInMemoryApiScopes(Config.GetApiScopes())
-                .AddAspNetIdentity<User>()
-                .AddProfileService<ProfileService>()
-                .AddResourceOwnerValidator<ResourceOwnerPasswordValidatorService<User>>(); //here;
+            .AddInMemoryIdentityResources(Config.GetIdentityResources())
+            .AddInMemoryApiResources(Config.GetApiResources())
+            .AddInMemoryClients(Config.GetClients())
+            .AddInMemoryApiScopes(Config.GetApiScopes())
+            .AddAspNetIdentity<User>()
+            .AddProfileService<ProfileService>()
+            .AddResourceOwnerValidator<ResourceOwnerPasswordValidatorService<User>>(); //here;
 
+            //Configure test api in same project for identity server
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -68,19 +73,21 @@ namespace Blog.Service.Identity.Api
                 o.Authority = "http://localhost:5010";
                 o.Audience = "blogapi"; // APi Resource Name
                 o.RequireHttpsMetadata = false;
+                o.IncludeErrorDetails = true;
+                o.MetadataAddress = "http://localhost:5010/.well-known/openid-configuration";
             });
 
             //MassTransit new Config setting
             services.AddMassTransit(x =>
             {
-                x.UsingRabbitMq( (context, cfg) =>
-                {
-                    cfg.Host(new Uri("rabbitmq://rabbitmq"), h =>
-                    {
-                        h.Username("guest");
-                        h.Password("guest");
-                    });
-                });
+                x.UsingRabbitMq((context, cfg) =>
+               {
+                   cfg.Host(new Uri("rabbitmq://rabbitmq"), h =>
+                   {
+                       h.Username("guest");
+                       h.Password("guest");
+                   });
+               });
             });
 
             services.AddMassTransitHostedService();
@@ -89,7 +96,7 @@ namespace Blog.Service.Identity.Api
         public void ConfigureContainer(ContainerBuilder builder)
         {
             //builder.RegisterModule(new DomainModule());
-           // builder.RegisterModule(new ServiceModule());
+            // builder.RegisterModule(new ServiceModule());
             builder.RegisterModule(new MediatorModule());
         }
 
