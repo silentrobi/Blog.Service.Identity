@@ -10,7 +10,7 @@ namespace Blog.Service.Identity.Application.Features.UserAccount.Commands.Valida
             RuleFor(model => model.UserName)
               .Cascade(CascadeMode.Stop)
               .NotEmpty().WithMessage("User Name field is missing")
-              .Must(IsUserNameUnique).WithMessage("Email Id is already exist");
+              .Must(IsUserNameUnique).WithMessage("User name is already exist");
 
             RuleFor(model => model.Email)
               .Cascade(CascadeMode.Stop)
