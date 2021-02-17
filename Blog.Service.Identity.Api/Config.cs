@@ -29,10 +29,10 @@ namespace Blog.Service.Identity.Api
                 new ApiResource(
                 "blogapi",
                 "Blog.Service.BlogApi",
-                new[] { 
-                    JwtClaimTypes.Subject, 
-                    JwtClaimTypes.Email, 
-                    JwtClaimTypes.Role, 
+                new[] {
+                    JwtClaimTypes.Subject,
+                    JwtClaimTypes.Email,
+                    JwtClaimTypes.Role,
                     JwtClaimTypes.PreferredUserName
                 })
                 {
@@ -57,23 +57,28 @@ namespace Blog.Service.Identity.Api
             return new[]
             {
                 new Client {
-                    RequireConsent = false,
                     ClientId = "blogapp",
                     ClientName = "blogapp",
                     ClientSecrets = { new Secret(SHARED_SECRET.Sha256()) },
-                    AllowedGrantTypes = GrantTypes.ResourceOwnerPasswordAndClientCredentials, // this grat type is used as blogapi with be owned client application.
-                    AlwaysIncludeUserClaimsInIdToken = true,
+                    
+                    //AlwaysIncludeUserClaimsInIdToken = true,
                     //You should not use  GrantTypes.ResourceOwnerPassword for third party app access to your data. Instead use Authorization code
                     //AllowOfflineAccess = true,//Enables refresh token
+                    
+                    AllowedGrantTypes = GrantTypes.Code, // this grat type is used as blogapi with be owned client application.             
                     AllowedScopes =
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
-                        //IdentityServerConstants.StandardScopes.OfflineAccess,
                         "blogapi.read", "blogapi.write"
                     },
+
                     AllowAccessTokensViaBrowser = true,
-                    //AccessTokenLifetime = 3600
+                    
+                    RedirectUris = new List<string> {"http://localhost:3000/authentication/callback"},
+                    PostLogoutRedirectUris = { "http://localhost:3000/" },
+                    
+                    AccessTokenLifetime = 75
                 }
             };
         }

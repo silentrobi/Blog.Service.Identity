@@ -8,10 +8,9 @@
     }
   },
   "profiles": {
-    "Blog.Service.Identity.Api": {
+    "Blog.Service.IdentityServer": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },

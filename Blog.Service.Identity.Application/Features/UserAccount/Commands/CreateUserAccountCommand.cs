@@ -1,8 +1,9 @@
-﻿using MediatR;
+﻿using Blog.Service.Identity.Domain.User;
+using MediatR;
 
 namespace Blog.Service.Identity.Application.Features.UserAccount.Commands
 {
-    public class CreateUserAccountCommand : IRequest<bool>
+    public class CreateUserAccountCommand : IRequest<User>
     {
         public string PhoneNumber { get; set; }
 

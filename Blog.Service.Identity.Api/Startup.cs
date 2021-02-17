@@ -29,22 +29,30 @@ namespace Blog.Service.Identity.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllersWithViews();
+
+            //services.AddControllers();
             services.AddApiVersioning();
 
             services.AddDbContext<ApplicationIdentityDbContext>(
                 options => options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<User, Role>()
-                .AddEntityFrameworkStores<ApplicationIdentityDbContext>()
+            services.AddIdentity<User, Role>(options =>
+            {
+                options.Password.RequireDigit = false;
+                options.Password.RequiredLength = 4;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireLowercase = false;
+            }).AddEntityFrameworkStores<ApplicationIdentityDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddSwagger();
+            //services.AddSwagger();
 
             // Adds IdentityServer
             services.AddIdentityServer(x =>
             {
-                x.IssuerUri = "http://blog.service.identity";
+                x.IssuerUri = "http://localhost:5010"; // docker uri: http://blog.service.identity
             })
             .AddDeveloperSigningCredential()
             // this adds the operational data from DB (codes, tokens, consents)
@@ -60,21 +68,21 @@ namespace Blog.Service.Identity.Api
             .AddInMemoryClients(Config.GetClients())
             .AddInMemoryApiScopes(Config.GetApiScopes())
             .AddAspNetIdentity<User>()
-            .AddProfileService<ProfileService>()
-            .AddResourceOwnerValidator<ResourceOwnerPasswordValidatorService<User>>(); //here;
+            .AddProfileService<ProfileService>();
+            //.AddResourceOwnerValidator<ResourceOwnerPasswordValidatorService<User>>(); //here;
 
             //Configure test api in same project for identity server
-            services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(o =>
-            {
-                o.Authority = "http://blog.service.identity";
-                o.Audience = "blogapi"; // APi Resource Name
-                o.RequireHttpsMetadata = false;
-                o.IncludeErrorDetails = true;
-            });
+            //services.AddAuthentication(options =>
+            //{
+            //    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            //    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            //}).AddJwtBearer(o =>
+            //{
+            //    o.Authority = "http://localhost:5010";  //docker uri: http://blog.service.identity
+            //    o.Audience = "blogapi"; // APi Resource Name
+            //    o.RequireHttpsMetadata = false;
+            //    o.IncludeErrorDetails = true;
+            //});
 
             //MassTransit new Config setting
             services.AddMassTransit(x =>
@@ -94,8 +102,6 @@ namespace Blog.Service.Identity.Api
 
         public void ConfigureContainer(ContainerBuilder builder)
         {
-            //builder.RegisterModule(new DomainModule());
-            // builder.RegisterModule(new ServiceModule());
             builder.RegisterModule(new MediatorModule());
         }
 
@@ -106,6 +112,9 @@ namespace Blog.Service.Identity.Api
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            // uncomment if you want to support static files
+            app.UseStaticFiles();
 
             app.UseAuthentication();// The missing line
 
@@ -119,14 +128,16 @@ namespace Blog.Service.Identity.Api
 
             app.UseAuthorization();
 
-            app.UseErrorHandlingMiddleware();
+            //app.UseErrorHandlingMiddleware();
 
-            app.UseSwaggerDoc();
+            //app.UseSwaggerDoc();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            //app.UseEndpoints(endpoints =>
+            //{
+            //    endpoints.MapControllers();
+            //});
+
+            app.UseEndpoints(endpoints => endpoints.MapDefaultControllerRoute());
 
             AutoMigrate(app);
         }

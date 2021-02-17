@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30503.244
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blog.Service.Identity.Api", "Blog.Service.Identity.Api\Blog.Service.Identity.Api.csproj", "{5336CD11-B547-4C25-8AA1-59F2BF77D287}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blog.Service.IdentityServer", "Blog.Service.Identity.Api\Blog.Service.IdentityServer.csproj", "{5336CD11-B547-4C25-8AA1-59F2BF77D287}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blog.Service.Identity.Application", "Blog.Service.Identity.Application\Blog.Service.Identity.Application.csproj", "{EF7258AF-EC50-45F1-A589-AB13DC0B3766}"
 EndProject

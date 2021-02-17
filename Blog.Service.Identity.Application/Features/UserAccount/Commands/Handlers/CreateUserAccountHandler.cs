@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Blog.Service.Identity.Application.Features.UserAccount.Commands.Handlers
 {
-    public class CreateUserAccountHandler : IRequestHandler<CreateUserAccountCommand, bool>
+    public class CreateUserAccountHandler : IRequestHandler<CreateUserAccountCommand, User>
     {
         private readonly IPublishEndpoint _endpoint;
         private readonly UserManager<User> _userManager;
@@ -20,7 +20,7 @@ namespace Blog.Service.Identity.Application.Features.UserAccount.Commands.Handle
             _endpoint = endpoint;
         }
 
-        public async Task<bool> Handle(CreateUserAccountCommand request, CancellationToken cancellationToken)
+        public async Task<User> Handle(CreateUserAccountCommand request, CancellationToken cancellationToken)
         {
             var user = new User()
             {
@@ -39,14 +39,14 @@ namespace Blog.Service.Identity.Application.Features.UserAccount.Commands.Handle
             await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("email", user.Email));
             await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("role", "Consumer"));
 
-            await NotificationEvent<AccountCreateNotification>.Raise(_endpoint, new AccountCreateNotification()
-            {
-                Title = "Account register confirmation",
-                Message = "New account is registered successfully",
-                Email = request.Email
-            });
+            //await NotificationEvent<AccountCreateNotification>.Raise(_endpoint, new AccountCreateNotification()
+            //{
+            //    Title = "Account register confirmation",
+            //    Message = "New account is registered successfully",
+            //    Email = request.Email
+            //});
 
-            return true;
+            return user;
         }
     }
 }

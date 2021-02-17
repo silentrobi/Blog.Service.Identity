@@ -1,0 +1,38 @@
+﻿@model RegisterRequestViewModel
+
+<div class="login-page">
+    <div class="lead">
+        <h1>Register</h1>
+    </div>
+
+    <partial name="_ValidationSummary" />
+
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Register Account</h2>
+                </div>
+
+                <div class="card-body">
+                    <form asp-route="Register">
+                        <div class="form-group">
+                            <label asp-for="UserName"></label>
+                            <input class="form-control" placeholder="User Name" asp-for="UserName" autofocus>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Email"></label>
+                            <input class="form-control" placeholder="Email" asp-for="Email" autofocus>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Password"></label>
+                            <input type="password" class="form-control" placeholder="Password" asp-for="Password" autocomplete="off">
+                        </div>
+                        <button class="btn btn-primary" name="button" value="register">Register</button>
+                        <button class="btn btn-secondary" name="button" value="cancel">Cancel</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
