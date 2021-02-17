@@ -8,6 +8,7 @@ using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -111,6 +112,8 @@ namespace Blog.Service.Identity.Api
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+
+                app.UseCookiePolicy(new CookiePolicyOptions { MinimumSameSitePolicy = SameSiteMode.Strict }); // solve same site cookie issue
             }
 
             // uncomment if you want to support static files
@@ -127,15 +130,6 @@ namespace Blog.Service.Identity.Api
             app.UseRouting();
 
             app.UseAuthorization();
-
-            //app.UseErrorHandlingMiddleware();
-
-            //app.UseSwaggerDoc();
-
-            //app.UseEndpoints(endpoints =>
-            //{
-            //    endpoints.MapControllers();
-            //});
 
             app.UseEndpoints(endpoints => endpoints.MapDefaultControllerRoute());
 
