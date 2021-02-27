@@ -9,7 +9,7 @@ namespace IdentityServer4Demo.Api
     [ApiController]
     public class TestController : ControllerBase
     {
-        [HttpGet]
+        [HttpGet("read")]
         [Authorize(policy:"apiread")]
         public IActionResult Get()
         {
@@ -19,6 +19,13 @@ namespace IdentityServer4Demo.Api
             var claims = User.Claims.Select(c => new { c.Type, c.Value });
             var test = identity.Claims.ToList();
             return new JsonResult(claims);
+        }
+
+        [HttpGet("write")]
+        [Authorize(policy: "apiwrite")]
+        public IActionResult Write()
+        {
+            return Ok("Api write operation");
         }
     }
 }

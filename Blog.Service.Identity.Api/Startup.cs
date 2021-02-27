@@ -37,8 +37,6 @@ namespace Blog.Service.Identity.Api
         {
             services.AddControllersWithViews();
 
-            //services.AddSameSiteCookiePolicy();
-
             services.AddDbContext<ApplicationIdentityDbContext>(
                 options => options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 
@@ -84,19 +82,6 @@ namespace Blog.Service.Identity.Api
 
             // preserve OIDC state in cache (solves problems with AAD and URL lenghts)
             services.AddOidcStateDataFormatterCache("aad");
-
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("apiread", policy =>
-                {
-                    
-                    policy.RequireClaim("scope","blogapi.read");
-                });
-                options.AddPolicy("apiwrite", policy =>
-                {
-                    policy.RequireClaim("scope","blogapi.write");
-                });
-            });
 
             //MassTransit new Config setting
             services.AddMassTransit(x =>
