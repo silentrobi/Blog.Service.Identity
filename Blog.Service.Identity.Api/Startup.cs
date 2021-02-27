@@ -4,17 +4,22 @@ using Blog.Service.Identity.Api.Services;
 using Blog.Service.Identity.Domain.Role;
 using Blog.Service.Identity.Domain.User;
 using Blog.Service.Identity.Infrastructure.Contexts;
+using IdentityServer4.AccessTokenValidation;
 using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using System;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace Blog.Service.Identity.Api
 {
@@ -32,14 +37,15 @@ namespace Blog.Service.Identity.Api
         {
             services.AddControllersWithViews();
 
-            //services.AddControllers();
-            services.AddApiVersioning();
+            //services.AddSameSiteCookiePolicy();
 
             services.AddDbContext<ApplicationIdentityDbContext>(
                 options => options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 
+            //Add custom User and Role entity to ASP.NET Identity
             services.AddIdentity<User, Role>(options =>
             {
+                //Disable password constraint
                 options.Password.RequireDigit = false;
                 options.Password.RequiredLength = 4;
                 options.Password.RequireNonAlphanumeric = false;
@@ -51,9 +57,13 @@ namespace Blog.Service.Identity.Api
             //services.AddSwagger();
 
             // Adds IdentityServer
-            services.AddIdentityServer(x =>
+            services.AddIdentityServer(options =>
             {
-                x.IssuerUri = "http://localhost:5010"; // docker uri: http://blog.service.identity
+                options.Events.RaiseErrorEvents = true;
+                options.Events.RaiseFailureEvents = true;
+                options.Events.RaiseInformationEvents = true;
+                options.Events.RaiseSuccessEvents = true;
+                options.IssuerUri = "http://localhost:5010"; // docker uri: http://blog.service.identity
             })
             .AddDeveloperSigningCredential()
             // this adds the operational data from DB (codes, tokens, consents)
@@ -72,18 +82,21 @@ namespace Blog.Service.Identity.Api
             .AddProfileService<ProfileService>();
             //.AddResourceOwnerValidator<ResourceOwnerPasswordValidatorService<User>>(); //here;
 
-            //Configure test api in same project for identity server
-            //services.AddAuthentication(options =>
-            //{
-            //    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            //    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            //}).AddJwtBearer(o =>
-            //{
-            //    o.Authority = "http://localhost:5010";  //docker uri: http://blog.service.identity
-            //    o.Audience = "blogapi"; // APi Resource Name
-            //    o.RequireHttpsMetadata = false;
-            //    o.IncludeErrorDetails = true;
-            //});
+            // preserve OIDC state in cache (solves problems with AAD and URL lenghts)
+            services.AddOidcStateDataFormatterCache("aad");
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("apiread", policy =>
+                {
+                    
+                    policy.RequireClaim("scope","blogapi.read");
+                });
+                options.AddPolicy("apiwrite", policy =>
+                {
+                    policy.RequireClaim("scope","blogapi.write");
+                });
+            });
 
             //MassTransit new Config setting
             services.AddMassTransit(x =>
@@ -131,7 +144,7 @@ namespace Blog.Service.Identity.Api
 
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints => endpoints.MapDefaultControllerRoute());
+            app.UseEndpoints(endpoints => endpoints.MapDefaultControllerRoute().RequireAuthorization());
 
             AutoMigrate(app);
         }

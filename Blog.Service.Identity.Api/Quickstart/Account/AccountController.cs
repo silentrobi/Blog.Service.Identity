@@ -152,6 +152,11 @@ namespace IdentityServerHost.Quickstart.UI
             if (ModelState.IsValid)
             {
                 var user = await _signInManager.UserManager.FindByNameAsync(model.Username);
+
+                if(user == null)
+                {                
+                        user = await _signInManager.UserManager.FindByEmailAsync(model.Username);
+                }
                 // validate username/password against in-memory store
                 if (user != null && (await _signInManager.CheckPasswordSignInAsync(user, model.Password, true)) == SignInResult.Success)
                 {

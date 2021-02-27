@@ -60,11 +60,6 @@ namespace Blog.Service.Identity.Api
                     ClientId = "blogapp",
                     ClientName = "blogapp",
                     ClientSecrets = { new Secret(SHARED_SECRET.Sha256()) },
-                    
-                    //AlwaysIncludeUserClaimsInIdToken = true,
-                    //You should not use  GrantTypes.ResourceOwnerPassword for third party app access to your data. Instead use Authorization code
-                    //AllowOfflineAccess = true,//Enables refresh token
-                    
                     AllowedGrantTypes = GrantTypes.Code, // this grat type is used as blogapi with be owned client application.             
                     AllowedScopes =
                     {
@@ -73,12 +68,12 @@ namespace Blog.Service.Identity.Api
                         "blogapi.read", "blogapi.write"
                     },
 
+                    RequirePkce= false,
                     AllowAccessTokensViaBrowser = true,
                     
-                    RedirectUris = new List<string> {"http://localhost:3000/authentication/callback"},
-                    PostLogoutRedirectUris = { "http://localhost:3000/" },
+                    RedirectUris = new List<string> {"http://localhost:5001/oauth2/callback"},
+                    PostLogoutRedirectUris = { "http://localhost:5001/" },
                     
-                    AccessTokenLifetime = 75
                 }
             };
         }
